@@ -8,6 +8,11 @@
 
 [StockPerson](https://github.com/bahmanm/stockperson) implemented using Java.
 
+# 🚧 Chapter 1.0 (WIP)
+
+* Read a CSV file that contains sales invoice lines.
+* Pretty-print the invoices in a document style.
+
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java?ref=badge_large)
