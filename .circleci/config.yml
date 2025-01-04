@@ -1,0 +1,64 @@
+---
+version: 2.1
+
+executors:
+  docker:
+    docker:
+      - image: bdockerimg/bmakelib:0.8.0--opensuse-tumbleweed
+        environment:
+          LANG: en_US.UTF-8
+          JVM_OPTS: -Xmx1024m
+    working_directory: ~/stockperson-java
+    resource_class: medium
+
+jobs:
+
+  test:
+    executor: docker
+    steps:
+      - run:
+          name: Install the runtime
+          command: >-
+            zypper --non-interactive refresh
+            && zypper --non-interactive install java-21-openjdk-devel
+            && { source /etc/profile || true; }
+            && cpan install Term::ANSIColor
+
+      - checkout
+
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "stockperson/build.gradle" }}
+            - dependencies-
+
+      - run:
+          name: Fetch the dependencies and compile
+          command: >-
+            make compile
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: dependencies-{{ checksum "stockperson/build.gradle" }}
+
+      - run:
+          name: Run the tests
+          command: >-
+            make test
+
+      - store_artifacts:
+          path: stockperson/build/reports
+          destination: test-reports
+
+      - store_test_results:
+          path: stockperson/build/test-results
+
+      - persist_to_workspace:
+          root: stockperson/build
+          paths:
+            - reports
+
+workflows:
+  build_test:
+    jobs:
+      - test
