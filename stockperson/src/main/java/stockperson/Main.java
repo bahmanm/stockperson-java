@@ -18,12 +18,15 @@
  */
 package stockperson;
 
-public class Main {
-  public String getGreeting() {
-    return "Hello, world!";
-  }
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-  public static void main() {
-    System.out.println(new Main().getGreeting());
+@SpringBootApplication
+@EnableAutoConfiguration
+public class Main {
+
+  public static void main(String[] args) {
+    SpringApplication.run(Main.class, args);
   }
 }

@@ -18,48 +18,38 @@
  */
 package stockperson;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.web.servlet.MockMvc;
 
+@SpringBootTest
+@AutoConfigureWebMvc
 class MainTest {
 
-  private final PrintStream originalSystemOut = System.out;
-  private ByteArrayOutputStream outputStream = null;
-  private PrintStream systemOut = null;
-
-  @AfterEach
-  public void restoreSystemOut() {
-    System.setOut(originalSystemOut);
-    systemOut.close();
-    systemOut = null;
-    try {
-      outputStream.close();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      outputStream = null;
-    }
-  }
-
-  @BeforeEach
-  public void setupSystemOut() {
-    outputStream = new ByteArrayOutputStream();
-    systemOut = new PrintStream(outputStream);
-    System.setOut(systemOut);
-  }
+  @Autowired private MockMvc mockMvc;
 
   @Test
-  void worksOk() {
-    // GIVEN
-    Main.main();
-
-    // EXPECT
-    assertThat(outputStream.toString()).isEqualTo("Hello, world!\n");
+  public void index_html() {
+    try {
+      var index_html = new ClassPathResource("public/index.html");
+      var html = new String(Files.readAllBytes(Path.of(index_html.getPath())));
+      this.mockMvc
+          .perform(get("/"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(html))
+          .andDo(print());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }

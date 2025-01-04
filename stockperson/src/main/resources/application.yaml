@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: stockperson
+  datasource:
+    platform: H2
+    url: jdbc:h2:mem:stockperson
+    driverClassName: org.h2.Driver
+    username: root
+    password: root
+    pool-size: 30
+    hikari:
+      connectionTimeout: 30000
+      idleTimeout: 60000
+      maxLifetime: 180000
+  jpa:
+    database: H2
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  
+server:
+  port: 8181
+
