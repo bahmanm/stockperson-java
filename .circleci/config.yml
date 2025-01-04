@@ -1,42 +1,64 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:java:.,tool:gradle:
+---
 version: 2.1
+
+executors:
+  docker:
+    docker:
+      - image: bdockerimg/bmakelib:0.8.0--opensuse-tumbleweed
+        environment:
+          LANG: en_US.UTF-8
+          JVM_OPTS: -Xmx1024m
+    working_directory: ~/stockperson-java
+    resource_class: medium
+
 jobs:
-  test-java:
-    docker:
-      - image: cimg/openjdk:17.0
+
+  test:
+    executor: docker
     steps:
+      - run:
+          name: Install the runtime
+          command: >-
+            zypper --non-interactive refresh
+            && zypper --non-interactive install java-21-openjdk-devel
+            && { source /etc/profile || true; }
+            && cpan install Term::ANSIColor
+
       - checkout
-      - run:
-          name: Calculate cache key
-          command: |-
-            find . -name 'pom.xml' -o -name 'gradlew*' -o -name '*.gradle*' | \
-                    sort | xargs cat > /tmp/CIRCLECI_CACHE_KEY
+
       - restore_cache:
-          key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
+          keys:
+            - dependencies-{{ checksum "stockperson/build.gradle" }}
+            - dependencies-
+
       - run:
-          command: ./gradlew check
-      - store_test_results:
-          path: build/test-results
+          name: Fetch the dependencies and compile
+          command: >-
+            make compile
+
       - save_cache:
-          key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
           paths:
-            - ~/.gradle/caches
-      - store_artifacts:
-          path: build/reports
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
+            - ~/.gradle
+          key: dependencies-{{ checksum "stockperson/build.gradle" }}
+
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Run the tests
+          command: >-
+            make test
+
+      - store_artifacts:
+          path: stockperson/build/reports
+          destination: test-reports
+
+      - store_test_results:
+          path: stockperson/build/test-results
+
+      - persist_to_workspace:
+          root: stockperson/build
+          paths:
+            - reports
+
 workflows:
-  build-and-test:
+  build_test:
     jobs:
-      - test-java
-    # - deploy:
-    #     requires:
-    #       - test-java
+      - test
