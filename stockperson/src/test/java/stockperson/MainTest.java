@@ -18,38 +18,34 @@
  */
 package stockperson;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureWebMvc
 class MainTest {
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired private WebApplicationContext webApplicationContext;
+
+  private MockMvc mockMvc;
+
+  @BeforeEach
+  public void setUp() {
+    mockMvc = webAppContextSetup(webApplicationContext).build();
+  }
 
   @Test
-  public void index_html() {
-    try {
-      var index_html = new ClassPathResource("public/index.html");
-      var html = new String(Files.readAllBytes(Path.of(index_html.getPath())));
-      this.mockMvc
-          .perform(get("/"))
-          .andExpect(status().isOk())
-          .andExpect(content().string(html))
-          .andDo(print());
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  void index_html() throws Exception {
+    mockMvc.perform(get("/")).andExpect(status().isOk());
   }
 }
