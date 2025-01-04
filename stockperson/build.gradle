@@ -1,0 +1,102 @@
+plugins {
+    id 'application'
+    id 'com.diffplug.spotless' version '6.25.0'
+    id 'jacoco'
+    id 'com.gradleup.shadow' version '9.0.0-beta4'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation libs.junit.jupiter
+    testImplementation 'org.assertj:assertj-core:3.27.1'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'stockperson.Main'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+spotless {
+    encoding 'UTF-8'
+    lineEndings 'UNIX'
+    format 'misc', {
+        target '*.gradle', '.gitignore'
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    java {
+        endWithNewline()
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat()
+        licenseHeader '''/*
+ * Copyright $YEAR Bahman Movaqar
+ *
+ * This file is part of StockPerson-Java.
+ *
+ * StockPerson-Java is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * StockPerson-Java is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
+ */
+'''
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.incremental = true
+        options.release.set(21)
+        options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked' << '-parameters' << '--enable-preview'
+        dependsOn 'spotlessApply'
+    }
+
+    tasks.withType(JavaExec).configureEach {
+    }
+
+    jacoco {
+        toolVersion = '0.8.12'
+    }
+
+    test {
+        finalizedBy jacocoTestReport
+    }
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.required = true
+            csv.required = true
+            html.required = false
+        }
+    }
+
+    tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+        archiveBaseName = 'stockperson'
+        archiveClassifier = ''
+        archiveVersion = System.getenv()['VERSION']
+    }
+
+}
