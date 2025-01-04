@@ -57,8 +57,44 @@ jobs:
           root: stockperson/build
           paths:
             - reports
+              
+  test_coverage:
+    executor: docker
+    steps:
+      - run:
+          name: Install Python
+          command: >-
+            zypper --non-interactive refresh
+            && zypper --non-interactive install python311
+
+      - checkout
+
+      - run:
+          name: Install Codecov-cli
+          command: >-
+            python3 -m venv .env
+            && source .env/bin/activate
+            && pip install -r requirements.txt
+
+      - attach_workspace:
+          at: bjforth/build
+
+      - run:
+          name: Upload the coverage reports
+          command: >-
+            source .env/bin/activate
+            && codecovcli --verbose \
+               upload-process \
+               --token "${CODECOV_TOKEN}" \
+               --git-service github \
+               --fail-on-error \
+               --dir=bjforth/build/reports/jacoco/test \
+               --report-type=coverage
 
 workflows:
   build_test:
     jobs:
       - test
+      - test_coverage:
+          requires:
+            - test
