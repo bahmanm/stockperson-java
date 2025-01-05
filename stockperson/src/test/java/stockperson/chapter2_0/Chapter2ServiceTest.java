@@ -20,11 +20,13 @@ package stockperson.chapter2_0;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static stockperson.chapter2_0.Chapter2Service.getMostExpensiveInvoice;
-import static stockperson.chapter2_0.Chapter2Service.getTotalSales;
+import static stockperson.chapter2_0.Chapter2Service.*;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
+import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
+import static stockperson.model.Product.ProductBuilder.aProduct;
 
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import stockperson.db.Db;
 
@@ -50,5 +52,28 @@ class Chapter2ServiceTest {
 
     // EXPECT
     assertThat(getMostExpensiveInvoice().getTotal()).isEqualTo(200d);
+  }
+
+  @Test
+  void test_getMostExpensiveProduct() {
+    // GIVEN
+    var p1 = aProduct().code("p1").build();
+    var p2 = aProduct().code("p2").build();
+    var i1 =
+        anInvoice()
+            .lines(Set.of(anInvoiceLine().lineNo(10).product(p1).price(100d).build()))
+            .build();
+    var i2 =
+        anInvoice()
+            .lines(
+                Set.of(
+                    anInvoiceLine().lineNo(10).product(p1).price(110d).build(),
+                    anInvoiceLine().lineNo(20).product(p2).price(98d).build()))
+            .build();
+    Db().save(i1);
+    Db().save(i2);
+
+    // EXPECT
+    assertThat(getMostExpensiveProduct()).isEqualTo(p1);
   }
 }

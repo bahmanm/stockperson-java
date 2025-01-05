@@ -20,7 +20,9 @@ package stockperson.chapter2_0;
 
 import static stockperson.db.Db.Db;
 
+import java.util.HashMap;
 import stockperson.model.Invoice;
+import stockperson.model.Product;
 
 public class Chapter2Service {
 
@@ -32,9 +34,32 @@ public class Chapter2Service {
     return Db().getInvoices().stream()
         .sorted(
             (i1, i2) -> {
-              return i1.getTotal() > i2.getTotal() ? -1 : 1;
+              return i1.getTotal() < i2.getTotal() ? -1 : 1;
             })
         .toList()
         .getFirst();
+  }
+
+  public static Product getMostExpensiveProduct() {
+    var productPrices = new HashMap<Product, Double>();
+    for (var invoice : Db().getInvoices()) {
+      for (var line : invoice.getLines()) {
+        if (productPrices.containsKey(line.getProduct())) {
+          if (productPrices.get(line.getProduct()) < line.getPrice()) {
+            productPrices.put(line.getProduct(), line.getPrice());
+          }
+        } else {
+          productPrices.put(line.getProduct(), line.getPrice());
+        }
+      }
+    }
+    Product result = null;
+    Double maxPrice = 0d;
+    for (var product : productPrices.keySet()) {
+      if (productPrices.get(product) > maxPrice) {
+        result = product;
+      }
+    }
+    return result;
   }
 }
