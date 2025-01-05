@@ -23,6 +23,7 @@ import static stockperson.chapter1_0.models.Invoice.Builder.anInvoice;
 import static stockperson.chapter1_0.models.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.chapter1_0.models.Product.ProductBuilder.aProduct;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.Test;
 class InvoiceTest {
 
   @Test
-  void builder() {
+  void test_Builder() {
     // GIVEN
     var date = new Date();
     var product = aProduct().code("product").build();
@@ -55,7 +56,7 @@ class InvoiceTest {
   }
 
   @Test
-  void addLine() {
+  void test_addLine() {
     // GIVEN
     var date = new Date();
     var product = aProduct().code("product").build();
@@ -70,7 +71,7 @@ class InvoiceTest {
   }
 
   @Test
-  void testEquals() {
+  void test_equals() {
     // GIVEN
     var i1 = anInvoice().docNo("docNo1").build();
     var i2 = anInvoice().docNo("docNo2").build();
@@ -79,5 +80,27 @@ class InvoiceTest {
     // EXPECT
     assertThat(i1.equals(i2)).isFalse();
     assertThat(i1.equals(i3)).isTrue();
+  }
+
+  @Test
+  void test_toString() {
+    var date = new Date();
+    var product = aProduct().code("foo").build();
+    var line = anInvoiceLine().lineNo(10).product(product).qty(10d).price(10d).amt(100d).build();
+    var invoice =
+        anInvoice()
+            .docNo("docNo")
+            .customer("customer")
+            .date(date)
+            .discount(1d)
+            .total(100d)
+            .lines(Set.of(line))
+            .build();
+
+    // EXPECT
+    assertThat(invoice.toString())
+        .isEqualTo(
+            "Invoice(docNo, customer, %s, 1.00, 100.00, [InvoiceLine(10, Product(foo), 10.00, 10.00, 100.00)])"
+                .formatted(new SimpleDateFormat("yyyy-MM-dd").format(date)));
   }
 }
