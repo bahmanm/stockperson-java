@@ -16,6 +16,10 @@ my old ThinkPad just didn't have the resources for me to pull it off. So, I stuc
 * ✔️ Read a CSV file that contains sales invoice lines.
 * ✔️ Pretty-print the invoices in a document style.
 
+```
+$ make chapter-1.0
+```
+
 # 🚧 Chapter 2.0 (WIP)
 
 1. Read a CSV file that contains sales invoice lines.
