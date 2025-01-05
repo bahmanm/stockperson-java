@@ -66,7 +66,7 @@ public class InvoiceLine {
   }
 
   public static class Builder {
-    InvoiceLine line = new InvoiceLine();
+    private InvoiceLine line = new InvoiceLine();
 
     private Builder() {}
 
