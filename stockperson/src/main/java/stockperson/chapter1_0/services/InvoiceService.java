@@ -23,8 +23,10 @@ import static stockperson.chapter1_0.models.Invoice.Builder.anInvoice;
 import static stockperson.chapter1_0.models.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.chapter1_0.models.Product.ProductBuilder.aProduct;
 
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import stockperson.chapter1_0.exceptions.StockPersonException;
 
 public class InvoiceService {
 
@@ -71,7 +73,7 @@ public class InvoiceService {
                     Db().save(i);
                     return i;
                   } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    throw new StockPersonException(e);
                   }
                 });
     var invoiceLine =
@@ -83,5 +85,19 @@ public class InvoiceService {
             .amt(Double.valueOf(fields[CsvFields.LINE_AMT.ordinal()]))
             .build();
     invoice.addLine(invoiceLine);
+  }
+
+  public static void invoicesFromCsvFile(File csvFile) {
+    try {
+      var fileReader = new FileReader(csvFile);
+      var reader = new BufferedReader(fileReader);
+      for (var line = reader.readLine(); line != null; line = reader.readLine()) {
+        if (!line.isEmpty() && !line.startsWith("# ")) {
+          invoiceFromCsv(line);
+        }
+      }
+    } catch (IOException e) {
+      throw new StockPersonException(e);
+    }
   }
 }

@@ -24,13 +24,17 @@ import static stockperson.chapter1_0.models.Invoice.Builder.anInvoice;
 import static stockperson.chapter1_0.models.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.chapter1_0.models.Product.ProductBuilder.aProduct;
 import static stockperson.chapter1_0.services.InvoiceService.invoiceFromCsv;
+import static stockperson.chapter1_0.services.InvoiceService.invoicesFromCsvFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stockperson.chapter1_0.db.Db;
+import stockperson.chapter1_0.models.Invoice;
 
 class InvoiceServiceTest {
 
@@ -154,5 +158,18 @@ class InvoiceServiceTest {
                 .price(4125.14d)
                 .amt(1324172.502135007716d)
                 .build());
+  }
+
+  @Test
+  void test_invoicesFromCsv() throws IOException {
+    // GIVEN
+    var path = getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getFile();
+
+    // WHEN
+    invoicesFromCsvFile(new File(path));
+
+    // THEN
+    assertThat(Db().getInvoices().stream().map(Invoice::getDocNo))
+        .containsExactlyInAnyOrder("QIjWQ7", "VEyrc8", "i5tDrI", "SNYGhz", "hrLZGI");
   }
 }
