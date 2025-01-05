@@ -38,7 +38,7 @@ public class Chapter2Service {
     return Db().getInvoices().stream()
         .sorted(
             (i1, i2) -> {
-              return i1.getTotal() < i2.getTotal() ? -1 : 1;
+              return i1.getTotal() < i2.getTotal() ? 1 : -1;
             })
         .toList()
         .getFirst();

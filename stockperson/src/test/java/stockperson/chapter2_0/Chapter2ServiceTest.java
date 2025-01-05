@@ -19,7 +19,6 @@
 package stockperson.chapter2_0;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static stockperson.chapter2_0.Chapter2Service.*;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
@@ -27,10 +26,16 @@ import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.model.Product.ProductBuilder.aProduct;
 
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stockperson.db.Db;
 
 class Chapter2ServiceTest {
+
+  @BeforeEach
+  void clearState() {
+    Db.clear();
+  }
 
   @Test
   void test_getTotalSales() {
