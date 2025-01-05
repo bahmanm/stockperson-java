@@ -20,12 +20,12 @@ package stockperson;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import stockperson.chapter1_0.Main;
 
 class MainTest {
 
@@ -55,11 +55,19 @@ class MainTest {
   }
 
   @Test
-  void worksOk() {
+  void worksOk() throws IOException {
     // GIVEN
-    Main.main();
+    var inputFilepath =
+        getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getPath();
+    var expectedOutputFile = getClass().getResource("/expected-output.txt").getFile();
+    var expectedOutputFileReader = new FileReader(expectedOutputFile);
+    var expectedOutputReader = new BufferedReader(expectedOutputFileReader);
+    var expectedOutput = expectedOutputReader.lines().collect(Collectors.joining("\n"));
 
-    // EXPECT
-    assertThat(outputStream.toString()).isEqualTo("Hello, world!\n");
+    // WHEN
+    Main.main(new String[] {inputFilepath});
+
+    // THEN
+    assertThat(outputStream.toString().trim()).isEqualTo(expectedOutput.trim());
   }
 }
