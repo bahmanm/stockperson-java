@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0.models;
+package stockperson.model;
 
 public class InvoiceLine {
 

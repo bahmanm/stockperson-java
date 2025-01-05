@@ -16,14 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0.exceptions;
+package stockperson.model;
 
-public class StockPersonException extends RuntimeException {
-  public StockPersonException(Throwable t) {
-    super(t);
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static stockperson.model.Product.ProductBuilder.aProduct;
+
+import org.junit.jupiter.api.Test;
+
+class ProductTest {
+
+  @Test
+  void test_Builder() {
+    // GIVEN
+    var product = aProduct().code("foo").build();
+
+    // EXPECT
+    assertThat(product.getCode()).isEqualTo("foo");
   }
 
-  public StockPersonException(String message) {
-    super(message);
+  @Test
+  void test_equals() {
+    var p1 = aProduct().code("foo").build();
+    var p2 = aProduct().code("bar").build();
+
+    // EXPECT
+    assertThat(p1.equals(p2)).isFalse();
+  }
+
+  @Test
+  void test_toString() {
+    // GIVEN
+    var p1 = aProduct().code("foo").build();
+
+    // EXPECT
+    assertThat(p1.toString()).isEqualTo("Product(foo)");
   }
 }

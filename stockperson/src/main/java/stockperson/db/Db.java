@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0.db;
+package stockperson.db;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import stockperson.chapter1_0.models.Invoice;
-import stockperson.chapter1_0.models.Product;
+import stockperson.model.Invoice;
+import stockperson.model.Product;
 
 public class Db {
 

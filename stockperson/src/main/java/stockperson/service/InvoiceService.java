@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0.services;
+package stockperson.service;
 
-import static stockperson.chapter1_0.db.Db.Db;
-import static stockperson.chapter1_0.models.Invoice.Builder.anInvoice;
-import static stockperson.chapter1_0.models.InvoiceLine.Builder.anInvoiceLine;
-import static stockperson.chapter1_0.models.Product.ProductBuilder.aProduct;
+import static stockperson.db.Db.Db;
+import static stockperson.model.Invoice.Builder.anInvoice;
+import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
+import static stockperson.model.Product.ProductBuilder.aProduct;
 
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import stockperson.chapter1_0.exceptions.StockPersonException;
+import stockperson.StockPersonException;
 
 public class InvoiceService {
 
