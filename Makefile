@@ -23,6 +23,7 @@ SHELL := /usr/bin/env bash
 
 export ROOT := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 export root.build = $(ROOT)stockperson/build/libs/
+export root.data = $(ROOT)data/
 
 ####################################################################################################
 
@@ -77,3 +78,8 @@ clean:
 
 ####################################################################################################
 
+.PHONY : chapter-1.0
+
+chapter-1.0 : gradle( shadowJar )
+chapter-1.0 :
+	@java -cp stockperson/build/libs/stockperson.jar stockperson.chapter1_0.Main $(root.data)chapter-1.0.csv
