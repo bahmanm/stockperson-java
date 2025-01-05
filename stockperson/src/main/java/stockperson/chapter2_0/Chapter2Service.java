@@ -20,12 +20,21 @@ package stockperson.chapter2_0;
 
 import static stockperson.db.Db.Db;
 
-import stockperson.db.Db;
 import stockperson.model.Invoice;
 
 public class Chapter2Service {
 
   public static Double getTotalSales() {
     return Db().getInvoices().stream().mapToDouble(Invoice::getTotal).sum();
+  }
+
+  public static Invoice getMostExpensiveInvoice() {
+    return Db().getInvoices().stream()
+        .sorted(
+            (i1, i2) -> {
+              return i1.getTotal() > i2.getTotal() ? -1 : 1;
+            })
+        .toList()
+        .getFirst();
   }
 }

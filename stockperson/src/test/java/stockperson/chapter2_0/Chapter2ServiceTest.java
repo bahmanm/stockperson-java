@@ -20,6 +20,7 @@ package stockperson.chapter2_0;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static stockperson.chapter2_0.Chapter2Service.getMostExpensiveInvoice;
 import static stockperson.chapter2_0.Chapter2Service.getTotalSales;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
@@ -38,5 +39,16 @@ class Chapter2ServiceTest {
 
     // EXPECT
     assertThat(getTotalSales()).isEqualTo(300d);
+  }
+
+  @Test
+  void test_getMostExpensiveInvoice() {
+    var i1 = anInvoice().total(100d).build();
+    var i2 = anInvoice().total(200d).build();
+    Db().save(i1);
+    Db().save(i2);
+
+    // EXPECT
+    assertThat(getMostExpensiveInvoice().getTotal()).isEqualTo(200d);
   }
 }
