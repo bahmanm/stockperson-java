@@ -16,23 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0;
+package stockperson;
 
-import static stockperson.db.Db.Db;
+public class StockPersonException extends RuntimeException {
+  public StockPersonException(Throwable t) {
+    super(t);
+  }
 
-import java.io.File;
-import stockperson.service.InvoicePrettyPrinter;
-import stockperson.service.InvoiceService;
-
-public class Main {
-
-  public static void main(String[] args) {
-    InvoiceService.invoicesFromCsvFile(new File(args[0]));
-    Db().getInvoices().stream()
-        .sorted(
-            (i1, i2) -> {
-              return i1.getDate().before(i2.getDate()) ? 1 : -1;
-            })
-        .forEach(new InvoicePrettyPrinter());
+  public StockPersonException(String message) {
+    super(message);
   }
 }

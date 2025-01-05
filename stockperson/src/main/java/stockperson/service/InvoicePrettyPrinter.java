@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0.services;
+package stockperson.service;
 
 import java.text.SimpleDateFormat;
 import java.util.function.Consumer;
-import stockperson.chapter1_0.models.Invoice;
+import stockperson.model.Invoice;
 
 public class InvoicePrettyPrinter implements Consumer<Invoice> {
 

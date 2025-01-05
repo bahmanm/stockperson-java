@@ -16,39 +16,49 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0.models;
+package stockperson.model;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static stockperson.chapter1_0.models.Product.ProductBuilder.aProduct;
+public class Product {
 
-import org.junit.jupiter.api.Test;
+  private String code;
 
-class ProductTest {
+  private Product() {}
 
-  @Test
-  void test_Builder() {
-    // GIVEN
-    var product = aProduct().code("foo").build();
-
-    // EXPECT
-    assertThat(product.getCode()).isEqualTo("foo");
+  public String getCode() {
+    return code;
   }
 
-  @Test
-  void test_equals() {
-    var p1 = aProduct().code("foo").build();
-    var p2 = aProduct().code("bar").build();
-
-    // EXPECT
-    assertThat(p1.equals(p2)).isFalse();
+  @Override
+  public String toString() {
+    return "Product(%s)".formatted(code);
   }
 
-  @Test
-  void test_toString() {
-    // GIVEN
-    var p1 = aProduct().code("foo").build();
+  @Override
+  public boolean equals(Object otherObj) {
+    if (otherObj instanceof Product other) {
+      return code.equals(other.code);
+    } else {
+      return false;
+    }
+  }
 
-    // EXPECT
-    assertThat(p1.toString()).isEqualTo("Product(foo)");
+  public static class ProductBuilder {
+
+    private Product product = new Product();
+
+    private ProductBuilder() {}
+
+    public static ProductBuilder aProduct() {
+      return new ProductBuilder();
+    }
+
+    public ProductBuilder code(String code) {
+      product.code = code;
+      return this;
+    }
+
+    public Product build() {
+      return product;
+    }
   }
 }

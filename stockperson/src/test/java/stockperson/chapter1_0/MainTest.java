@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson;
+package stockperson.chapter1_0;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stockperson.chapter1_0.Main;
 
 class MainTest {
 
