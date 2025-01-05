@@ -119,4 +119,36 @@ class Chapter2ServiceTest {
               }
             });
   }
+
+  @Test
+  void test_getSalesByCustomer() {
+    var p1 = aProduct().code("p1").build();
+    var p2 = aProduct().code("p2").build();
+    var i1 =
+        anInvoice()
+            .customer("customer")
+            .lines(
+                Set.of(
+                    anInvoiceLine().lineNo(10).product(p1).price(100d).build(),
+                    anInvoiceLine().lineNo(20).product(p2).price(40d).build()))
+            .total(1800d)
+            .build();
+    var i2 =
+        anInvoice()
+            .customer("customer")
+            .lines(
+                Set.of(
+                    anInvoiceLine().lineNo(10).product(p1).price(110d).build(),
+                    anInvoiceLine().lineNo(20).product(p2).price(50d).build()))
+            .total(2100d)
+            .build();
+    Db().save(i1);
+    Db().save(i2);
+
+    // WHEN
+    var actual = getSalesByCustomer();
+
+    // THEN
+    assertThat(actual).containsEntry("customer", 3900d);
+  }
 }

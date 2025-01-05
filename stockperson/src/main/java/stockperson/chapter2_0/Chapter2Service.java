@@ -83,4 +83,16 @@ public class Chapter2Service {
     }
     return result;
   }
+
+  public static Map<String, Double> getSalesByCustomer() {
+    var result = new HashMap<String, Double>();
+    for (var invoice : Db().getInvoices()) {
+      if (!result.containsKey(invoice.getCustomer())) {
+        result.put(invoice.getCustomer(), invoice.getTotal());
+      } else {
+        result.put(invoice.getCustomer(), invoice.getTotal() + result.get(invoice.getCustomer()));
+      }
+    }
+    return result;
+  }
 }
