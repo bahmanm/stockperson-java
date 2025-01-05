@@ -57,14 +57,14 @@ public class Chapter2Service {
         }
       }
     }
-    Product result = null;
-    Double maxPrice = 0d;
-    for (var product : productPrices.keySet()) {
-      if (productPrices.get(product) > maxPrice) {
-        result = product;
-      }
-    }
-    return result;
+    return productPrices.entrySet().stream()
+        .sorted(
+            (kv1, kv2) -> {
+              return kv1.getValue() < kv2.getValue() ? 1 : -1;
+            })
+        .toList()
+        .getFirst()
+        .getKey();
   }
 
   public static Map<Product, Double> getAvgProductPrices() {
