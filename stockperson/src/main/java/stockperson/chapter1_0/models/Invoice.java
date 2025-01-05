@@ -19,6 +19,7 @@
 package stockperson.chapter1_0.models;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Invoice {
@@ -28,7 +29,7 @@ public class Invoice {
   private Date date;
   private Double discount;
   private Double total;
-  private Set<InvoiceLine> lines;
+  private Set<InvoiceLine> lines = new HashSet<>();
 
   private Invoice() {}
 
@@ -54,6 +55,10 @@ public class Invoice {
 
   public Set<InvoiceLine> getLines() {
     return lines;
+  }
+
+  public void addLine(InvoiceLine line) {
+    lines.add(line);
   }
 
   public static class InvoiceBuiler {

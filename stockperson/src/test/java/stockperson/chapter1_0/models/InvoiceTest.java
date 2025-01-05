@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 class InvoiceTest {
 
   @Test
-  void worksOkbuilder() {
+  void builder() {
     // GIVEN
     var date = new Date();
     var product = aProduct().code("product").build();
@@ -51,6 +51,21 @@ class InvoiceTest {
     assertThat(invoice.getDate()).isEqualTo(date);
     assertThat(invoice.getDiscount()).isEqualTo(10d);
     assertThat(invoice.getTotal()).isEqualTo(100d);
+    assertThat(invoice.getLines()).isEqualTo(Set.of(line));
+  }
+
+  @Test
+  void addLine() {
+    // GIVEN
+    var date = new Date();
+    var product = aProduct().code("product").build();
+    var line = anInvoiceLine().lineNo(10).product(product).qty(10d).price(10d).amt(100d).build();
+    var invoice = anInvoice().build();
+
+    // WHEN
+    invoice.addLine(line);
+
+    // THEN
     assertThat(invoice.getLines()).isEqualTo(Set.of(line));
   }
 }
