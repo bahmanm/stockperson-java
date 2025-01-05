@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 class InvoiceLineTest {
 
   @Test
-  void worksOkBuilder() {
+  void test_Builder() {
     // GIVEN
     var product = aProduct().code("foo").build();
     var line = anInvoiceLine().lineNo(10).product(product).price(100d).qty(2d).amt(200d).build();
@@ -41,7 +41,8 @@ class InvoiceLineTest {
     assertThat(line.getAmt()).isEqualTo(200d);
   }
 
-  void worksOkequals() {
+  @Test
+  void test_equals() {
     // GIVEN
     var product = aProduct().code("foo").build();
     var line1 = anInvoiceLine().lineNo(10).product(product).price(100d).qty(2d).amt(200d).build();
@@ -49,5 +50,15 @@ class InvoiceLineTest {
 
     // EXPECT
     assertThat(line1.equals(line2)).isFalse();
+  }
+
+  @Test
+  void test_toString() {
+    // GIVEN
+    var product = aProduct().code("foo").build();
+    var line = anInvoiceLine().lineNo(10).product(product).price(100d).qty(2d).amt(200d).build();
+
+    // EXPECT
+    assertThat(line.toString()).isEqualTo("InvoiceLine(10, Product(foo), 2.00, 100.00, 200.00)");
   }
 }

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 class ProductTest {
 
   @Test
-  void worksOkBuilder() {
+  void test_Builder() {
     // GIVEN
     var product = aProduct().code("foo").build();
 
@@ -35,11 +35,20 @@ class ProductTest {
   }
 
   @Test
-  void worksOkequals() {
+  void test_equals() {
     var p1 = aProduct().code("foo").build();
     var p2 = aProduct().code("bar").build();
 
     // EXPECT
     assertThat(p1.equals(p2)).isFalse();
+  }
+
+  @Test
+  void test_toString() {
+    // GIVEN
+    var p1 = aProduct().code("foo").build();
+
+    // EXPECT
+    assertThat(p1.toString()).isEqualTo("Product(foo)");
   }
 }
