@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import stockperson.db.Db;
 
 class MainTest {
 
@@ -51,6 +52,7 @@ class MainTest {
     outputStream = new ByteArrayOutputStream();
     systemOut = new PrintStream(outputStream);
     System.setOut(systemOut);
+    Db.clear();
   }
 
   @Test
