@@ -18,9 +18,13 @@
  */
 package stockperson.chapter2_0;
 
+import static java.util.stream.Collectors.averagingDouble;
 import static stockperson.db.Db.Db;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import stockperson.model.Invoice;
 import stockperson.model.Product;
 
@@ -59,6 +63,23 @@ public class Chapter2Service {
       if (productPrices.get(product) > maxPrice) {
         result = product;
       }
+    }
+    return result;
+  }
+
+  public static Map<Product, Double> getAvgProductPrices() {
+    var prices = new HashMap<Product, List<Double>>();
+    for (var invoice : Db().getInvoices()) {
+      for (var line : invoice.getLines()) {
+        if (!prices.containsKey(line.getProduct())) {
+          prices.put(line.getProduct(), new ArrayList<>());
+        }
+        prices.get(line.getProduct()).add(line.getPrice());
+      }
+    }
+    var result = new HashMap<Product, Double>();
+    for (var product : prices.keySet()) {
+      result.put(product, prices.get(product).stream().collect(averagingDouble((price) -> price)));
     }
     return result;
   }
