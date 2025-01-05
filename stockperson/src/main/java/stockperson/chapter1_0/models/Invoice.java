@@ -18,9 +18,11 @@
  */
 package stockperson.chapter1_0.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Invoice {
 
@@ -61,41 +63,62 @@ public class Invoice {
     lines.add(line);
   }
 
-  public static class InvoiceBuiler {
+  @Override
+  public String toString() {
+    return "Invoice(%s, %s, %s, %.2f, %.2f, [%s])"
+        .formatted(
+            docNo,
+            customer,
+            new SimpleDateFormat("yyyy-MM-dd").format(date),
+            discount,
+            total,
+            lines.stream().map(InvoiceLine::toString).collect(Collectors.joining(",")));
+  }
+
+  @Override
+  public boolean equals(Object otherObj) {
+    if (otherObj instanceof Invoice other) {
+      return docNo.equals(other.docNo);
+    } else {
+      return false;
+    }
+  }
+
+  public static class Builder {
     Invoice invoice = new Invoice();
 
-    private InvoiceBuiler() {}
+    private Builder() {}
 
-    public static InvoiceBuiler anInvoice() {
-      return new InvoiceBuiler();
+    public static Builder anInvoice() {
+      return new Builder();
     }
 
-    public InvoiceBuiler docNo(String docNo) {
+    public Builder docNo(String docNo) {
       invoice.docNo = docNo;
       return this;
     }
 
-    public InvoiceBuiler customer(String customer) {
+    public Builder customer(String customer) {
       invoice.customer = customer;
       return this;
     }
 
-    public InvoiceBuiler date(Date date) {
+    public Builder date(Date date) {
       invoice.date = date;
       return this;
     }
 
-    public InvoiceBuiler discount(Double discount) {
+    public Builder discount(Double discount) {
       invoice.discount = discount;
       return this;
     }
 
-    public InvoiceBuiler total(Double total) {
+    public Builder total(Double total) {
       invoice.total = total;
       return this;
     }
 
-    public InvoiceBuiler lines(Set<InvoiceLine> lines) {
+    public Builder lines(Set<InvoiceLine> lines) {
       invoice.lines = lines;
       return this;
     }

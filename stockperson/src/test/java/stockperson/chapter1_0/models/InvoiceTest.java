@@ -19,7 +19,7 @@
 package stockperson.chapter1_0.models;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static stockperson.chapter1_0.models.Invoice.InvoiceBuiler.anInvoice;
+import static stockperson.chapter1_0.models.Invoice.Builder.anInvoice;
 import static stockperson.chapter1_0.models.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.chapter1_0.models.Product.ProductBuilder.aProduct;
 
@@ -67,5 +67,17 @@ class InvoiceTest {
 
     // THEN
     assertThat(invoice.getLines()).isEqualTo(Set.of(line));
+  }
+
+  @Test
+  void testEquals() {
+    // GIVEN
+    var i1 = anInvoice().docNo("docNo1").build();
+    var i2 = anInvoice().docNo("docNo2").build();
+    var i3 = anInvoice().docNo("docNo1").build();
+
+    // EXPECT
+    assertThat(i1.equals(i2)).isFalse();
+    assertThat(i1.equals(i3)).isTrue();
   }
 }
