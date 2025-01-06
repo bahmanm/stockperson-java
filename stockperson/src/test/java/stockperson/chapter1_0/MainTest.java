@@ -60,7 +60,7 @@ class MainTest {
     // GIVEN
     var inputFilepath =
         getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getPath();
-    var expectedOutputFile = getClass().getResource("/expected-output.txt").getFile();
+    var expectedOutputFile = getClass().getResource("/expected-output-chapter1.0.txt").getFile();
     var expectedOutputFileReader = new FileReader(expectedOutputFile);
     var expectedOutputReader = new BufferedReader(expectedOutputFileReader);
     var expectedOutput = expectedOutputReader.lines().collect(Collectors.joining("\n"));
