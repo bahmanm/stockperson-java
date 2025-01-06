@@ -20,17 +20,21 @@ my old ThinkPad just didn't have the resources for me to pull it off. So, I stuc
 $ make chapter-1.0
 ```
 
-# 🚧 Chapter 2.0 (WIP)
+# ✅ Chapter 2.0 
 
-1. Read a CSV file that contains sales invoice lines.
-2. Find the total sales.
-3. Find the most expensive invoice and pretty print it in a document style.
-4. Find the most expensive product and print its code.
-5. Calculate the average price of each product, and print the the list of prices in descending order.
-6. Find the total sales per customer and print a list in descending order in the form `customer, total`.
-7. Find the customer with the largest total sales.
-8. Find the 3 customers with the least total sales and print a list in descending format in the form `customer, total`.
-9. Find the date with the largest total sales amount.
+* ✔️ Read a CSV file that contains sales invoice lines.
+* ✔️ Find the total sales.
+* ✔️ Find the most expensive invoice and pretty print it in a document style.
+* ✔️ Find the most expensive product and print its code.
+* ✔️ Calculate the average price of each product, and print the the list of prices in descending order.
+* ✔️ Find the total sales per customer and print a list in descending order in the form `customer, total`.
+* ✔️ Find the customer with the largest total sales.
+* ✔️ Find the 3 customers with the least total sales and print a list in descending format in the form `customer, total`.
+* ✔️ Find the date with the largest total sales amount.
+
+```
+$ make chapter-2.0
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java?ref=badge_large)

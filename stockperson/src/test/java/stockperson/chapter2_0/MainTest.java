@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0;
+package stockperson.chapter2_0;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static java.util.stream.Collectors.joining;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,11 +60,11 @@ class MainTest {
   void worksOk() throws IOException {
     // GIVEN
     var inputFilepath =
-        getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getPath();
-    var expectedOutputFile = getClass().getResource("/expected-output-chapter1.0.txt").getFile();
+        getClass().getResource("/stockperson-data-chapter2.0--set-01.csv").getPath();
+    var expectedOutputFile = getClass().getResource("/expected-output-chapter2.0.txt").getFile();
     var expectedOutputFileReader = new FileReader(expectedOutputFile);
     var expectedOutputReader = new BufferedReader(expectedOutputFileReader);
-    var expectedOutput = expectedOutputReader.lines().collect(Collectors.joining("\n"));
+    var expectedOutput = expectedOutputReader.lines().collect(joining("\n"));
 
     // WHEN
     Main.main(new String[] {inputFilepath});

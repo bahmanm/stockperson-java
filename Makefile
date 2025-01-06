@@ -83,3 +83,11 @@ clean:
 chapter-1.0 : gradle( shadowJar )
 chapter-1.0 :
 	@java -cp stockperson/build/libs/stockperson.jar stockperson.chapter1_0.Main $(root.data)chapter-1.0.csv
+
+####################################################################################################
+
+.PHONY : chapter-2.0
+
+chapter-2.0 : gradle( shadowJar )
+chapter-2.0 :
+	@java -cp stockperson/build/libs/stockperson.jar stockperson.chapter2_0.Main $(root.data)chapter-2.0.csv
