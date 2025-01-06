@@ -32,5 +32,9 @@ $ make chapter-1.0
 * ✔️ Find the 3 customers with the least total sales and print a list in descending format in the form `customer, total`.
 * ✔️ Find the date with the largest total sales amount.
 
+```
+$ make chapter-2.0
+```
+
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java?ref=badge_large)
