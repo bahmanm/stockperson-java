@@ -25,6 +25,8 @@ import static stockperson.model.Invoice.Builder.anInvoice;
 import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.model.Product.ProductBuilder.aProduct;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -155,5 +157,38 @@ class Chapter2ServiceTest {
 
     // THEN
     assertThat(actual).containsEntry("customer", 3900d);
+  }
+
+  @Test
+  void test_getSalesByDate() throws ParseException {
+    // GIVEN
+    var date = new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-05");
+    var p1 = aProduct().code("p1").build();
+    var p2 = aProduct().code("p2").build();
+    var i1 =
+        anInvoice()
+            .customer("customer")
+            .date(date)
+            .lines(
+                Set.of(
+                    anInvoiceLine().lineNo(10).product(p1).price(100d).build(),
+                    anInvoiceLine().lineNo(20).product(p2).price(40d).build()))
+            .total(1800d)
+            .build();
+    var i2 =
+        anInvoice()
+            .customer("customer")
+            .date(date)
+            .lines(
+                Set.of(
+                    anInvoiceLine().lineNo(10).product(p1).price(110d).build(),
+                    anInvoiceLine().lineNo(20).product(p2).price(50d).build()))
+            .total(2100d)
+            .build();
+    Db().save(i1);
+    Db().save(i2);
+
+    // EXPECT
+    assertThat(getSalesByDate()).containsEntry(date, 3900d);
   }
 }

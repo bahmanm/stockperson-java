@@ -21,10 +21,7 @@ package stockperson.chapter2_0;
 import static java.util.stream.Collectors.averagingDouble;
 import static stockperson.db.Db.Db;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import stockperson.model.Invoice;
 import stockperson.model.Product;
 
@@ -91,6 +88,18 @@ public class Chapter2Service {
         result.put(invoice.getCustomer(), invoice.getTotal());
       } else {
         result.put(invoice.getCustomer(), invoice.getTotal() + result.get(invoice.getCustomer()));
+      }
+    }
+    return result;
+  }
+
+  public static Map<Date, Double> getSalesByDate() {
+    var result = new HashMap<Date, Double>();
+    for (var invoice : Db().getInvoices()) {
+      if (!result.containsKey(invoice.getDate())) {
+        result.put(invoice.getDate(), invoice.getTotal());
+      } else {
+        result.put(invoice.getDate(), invoice.getTotal() + result.get(invoice.getDate()));
       }
     }
     return result;
