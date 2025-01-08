@@ -22,10 +22,6 @@ java {
     }
 }
 
-application {
-    mainClass = 'stockperson.Main'
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
