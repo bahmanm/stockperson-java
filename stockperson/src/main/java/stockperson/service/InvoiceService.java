@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import stockperson.StockPersonException;
 import stockperson.model.Invoice;
+import stockperson.model.InvoiceLine;
 
 public class InvoiceService {
 
@@ -125,9 +126,10 @@ public class InvoiceService {
       Db().save(invoice);
       return true;
     } else {
-      var hasInvalidLine =
-          invoice.getLines().stream().anyMatch(il -> il.getProduct().getQty() < il.getQty());
-      if (hasInvalidLine) {
+      invoice.getLines().stream()
+          .filter(il -> il.getProduct().getQty() < il.getQty())
+          .forEach(InvoiceLine::invalid);
+      if (!invoice.getLines().stream().allMatch(InvoiceLine::getIsValid)) {
         invoice.setIsProcessed(false);
         Db().save(invoice);
         return false;

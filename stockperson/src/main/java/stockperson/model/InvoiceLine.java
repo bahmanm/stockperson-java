@@ -25,6 +25,7 @@ public class InvoiceLine {
   private Double qty;
   private Double price;
   private Double amt;
+  private Boolean isValid = true;
 
   private InvoiceLine() {}
 
@@ -46,6 +47,14 @@ public class InvoiceLine {
 
   public Double getAmt() {
     return amt;
+  }
+
+  public Boolean getIsValid() {
+    return isValid;
+  }
+
+  public void invalid() {
+    isValid = false;
   }
 
   @Override

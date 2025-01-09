@@ -35,6 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stockperson.db.Db;
 import stockperson.model.Invoice;
+import stockperson.model.InvoiceLine;
 
 class InvoiceServiceTest {
 
@@ -190,6 +191,7 @@ class InvoiceServiceTest {
 
     // THEN
     assertThat(result).isTrue();
+    assertThat(invoice.getLines().stream().allMatch(InvoiceLine::getIsValid)).isTrue();
     assertThat(p1.getQty()).isEqualTo(25d);
   }
 
@@ -210,6 +212,7 @@ class InvoiceServiceTest {
 
     // THEN
     assertThat(result).isTrue();
+    assertThat(invoice.getLines().stream().allMatch(InvoiceLine::getIsValid)).isTrue();
     assertThat(p1.getQty()).isEqualTo(1d);
   }
 
@@ -230,6 +233,7 @@ class InvoiceServiceTest {
 
     // THEN
     assertThat(result).isFalse();
+    assertThat(invoice.getLines().stream().allMatch(InvoiceLine::getIsValid)).isFalse();
     assertThat(p1.getQty()).isEqualTo(10d);
   }
 
@@ -262,6 +266,7 @@ class InvoiceServiceTest {
 
     // THEN
     assertThat(result).hasValue(Set.of(invoice1));
+    assertThat(invoice1.getLines().stream().allMatch(InvoiceLine::getIsValid)).isFalse();
     assertThat(p1.getQty()).isEqualTo(20d);
   }
 
