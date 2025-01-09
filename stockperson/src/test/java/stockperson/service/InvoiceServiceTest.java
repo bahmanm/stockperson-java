@@ -238,17 +238,20 @@ class InvoiceServiceTest {
     // GIVEN
     var p1 = aProduct().code("p1").qty(10d).build();
     Db().save(p1);
+    var date1 = new Date();
+    var date2 = new Date();
+    date2.setTime(date1.getTime() + 1_000);
 
     var invoice1 =
         anInvoice()
-            .date(new Date())
+            .date(date1)
             .docNo("i1")
             .salesInvoice()
             .lines(Set.of(anInvoiceLine().product(p1).qty(11d).build()))
             .build();
     var invoice2 =
         anInvoice()
-            .date(new Date())
+            .date(date2)
             .docNo("i2")
             .purchaseInvoice()
             .lines(Set.of(anInvoiceLine().product(p1).qty(10d).build()))
@@ -267,17 +270,20 @@ class InvoiceServiceTest {
     // GIVEN
     var p1 = aProduct().code("p1").qty(10d).build();
     Db().save(p1);
+    var date1 = new Date();
+    var date2 = new Date();
+    date2.setTime(date1.getTime() + 1_000);
 
     var invoice1 =
         anInvoice()
-            .date(new Date())
+            .date(date1)
             .docNo("i1")
             .salesInvoice()
             .lines(Set.of(anInvoiceLine().product(p1).qty(9d).build()))
             .build();
     var invoice2 =
         anInvoice()
-            .date(new Date())
+            .date(date2)
             .docNo("i2")
             .purchaseInvoice()
             .lines(Set.of(anInvoiceLine().product(p1).qty(10d).build()))
@@ -296,10 +302,13 @@ class InvoiceServiceTest {
     // GIVEN
     var p1 = aProduct().code("p1").qty(10d).build();
     Db().save(p1);
+    var date1 = new Date();
+    var date2 = new Date();
+    date2.setTime(date1.getTime() + 1_000);
 
     var invoice1 =
         anInvoice()
-            .date(new Date())
+            .date(date1)
             .docNo("i2")
             .purchaseInvoice()
             .lines(Set.of(anInvoiceLine().product(p1).qty(10d).build()))
@@ -307,7 +316,7 @@ class InvoiceServiceTest {
 
     var invoice2 =
         anInvoice()
-            .date(new Date())
+            .date(date2)
             .docNo("i1")
             .salesInvoice()
             .lines(Set.of(anInvoiceLine().product(p1).qty(15d).build()))
