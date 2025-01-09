@@ -69,6 +69,10 @@ public class Invoice {
     return isProcessed;
   }
 
+  public void setIsProcessed(Boolean isProcessed) {
+    this.isProcessed = isProcessed;
+  }
+
   public Boolean getIsSales() {
     return isSales;
   }
