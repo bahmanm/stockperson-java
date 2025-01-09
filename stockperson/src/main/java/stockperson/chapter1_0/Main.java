@@ -27,7 +27,7 @@ import stockperson.service.InvoiceService;
 public class Main {
 
   public static void main(String[] args) {
-    InvoiceService.invoicesFromCsvFile(new File(args[0]));
+    InvoiceService.invoicesFromCsvFile(new File(args[0]), true);
     Db().getInvoices().stream()
         .sorted(
             (i1, i2) -> {

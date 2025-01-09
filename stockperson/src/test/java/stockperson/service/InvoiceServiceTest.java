@@ -61,7 +61,7 @@ class InvoiceServiceTest {
                 .build());
 
     // WHEN
-    invoiceFromCsv(csv);
+    invoiceFromCsv(csv, true);
 
     // THEN
     assertThat(Db().getInvoice("QIjWQ7")).isPresent();
@@ -93,7 +93,7 @@ class InvoiceServiceTest {
                 .build());
 
     // WHEN
-    invoiceFromCsv(csv);
+    invoiceFromCsv(csv, true);
 
     // THEN
     assertThat(Db().getProduct("aF1KeUz")).hasValue(aProduct().code("aF1KeUz").build());
@@ -145,7 +145,7 @@ class InvoiceServiceTest {
                 .build());
 
     // WHEN
-    invoiceFromCsv(csv);
+    invoiceFromCsv(csv, true);
 
     // THEN
     assertThat(Db().getInvoice("QIjWQ7")).isPresent();
@@ -167,7 +167,7 @@ class InvoiceServiceTest {
     var path = getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getFile();
 
     // WHEN
-    invoicesFromCsvFile(new File(path));
+    invoicesFromCsvFile(new File(path), true);
 
     // THEN
     assertThat(Db().getInvoices().stream().map(Invoice::getDocNo))

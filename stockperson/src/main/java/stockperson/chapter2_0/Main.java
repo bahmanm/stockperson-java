@@ -29,7 +29,7 @@ public class Main {
 
   public static void main(String[] args) {
     // 1
-    invoicesFromCsvFile(new File(args[0]));
+    invoicesFromCsvFile(new File(args[0]), true);
     // 2
     System.out.printf("\uD83D\uDC49 TOTAL SALES: %.2f%n", getTotalSales());
     // 3

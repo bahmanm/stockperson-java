@@ -48,7 +48,7 @@ public class InvoiceService {
     LINE_AMT;
   }
 
-  public static void invoiceFromCsv(String csv) {
+  public static void invoiceFromCsv(String csv, Boolean isSales) {
     var fields = csv.split(",");
     var product =
         Db()
@@ -65,7 +65,8 @@ public class InvoiceService {
             .orElseGet(
                 () -> {
                   try {
-                    var i =
+                    Invoice i = null;
+                    var ib =
                         anInvoice()
                             .docNo(fields[CsvFields.DOC_NO.ordinal()])
                             .customer(fields[CsvFields.CUSTOMER.ordinal()])
@@ -73,8 +74,12 @@ public class InvoiceService {
                                 new SimpleDateFormat("yyyy-MM-dd")
                                     .parse(fields[CsvFields.DATE.ordinal()]))
                             .discount(Double.valueOf(fields[CsvFields.DISCOUNT.ordinal()]))
-                            .total(Double.valueOf(fields[CsvFields.TOTAL.ordinal()]))
-                            .build();
+                            .total(Double.valueOf(fields[CsvFields.TOTAL.ordinal()]));
+                    if (isSales) {
+                      i = ib.salesInvoice().build();
+                    } else {
+                      i = ib.purchaseInvoice().build();
+                    }
                     Db().save(i);
                     return i;
                   } catch (ParseException e) {
@@ -92,13 +97,13 @@ public class InvoiceService {
     invoice.addLine(invoiceLine);
   }
 
-  public static void invoicesFromCsvFile(File csvFile) {
+  public static void invoicesFromCsvFile(File csvFile, Boolean isSales) {
     try {
       var fileReader = new FileReader(csvFile);
       var reader = new BufferedReader(fileReader);
       for (var line = reader.readLine(); line != null; line = reader.readLine()) {
         if (!line.isEmpty() && !line.startsWith("# ")) {
-          invoiceFromCsv(line);
+          invoiceFromCsv(line, isSales);
         }
       }
     } catch (IOException e) {
