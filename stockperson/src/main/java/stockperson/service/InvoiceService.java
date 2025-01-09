@@ -26,7 +26,11 @@ import static stockperson.model.Product.Builder.aProduct;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import stockperson.StockPersonException;
+import stockperson.model.Invoice;
 
 public class InvoiceService {
 
@@ -98,6 +102,43 @@ public class InvoiceService {
       }
     } catch (IOException e) {
       throw new StockPersonException(e);
+    }
+  }
+
+  public static Optional<Set<Invoice>> process(Set<Invoice> invoices) {
+    Set<Invoice> unprocessedInvoices = new HashSet<>();
+    invoices.stream()
+        .sorted((i1, i2) -> i1.getDate().before(i2.getDate()) ? -1 : 1)
+        .forEachOrdered(
+            invoice -> {
+              if (!process(invoice)) {
+                unprocessedInvoices.add(invoice);
+              }
+            });
+    return unprocessedInvoices.isEmpty() ? Optional.empty() : Optional.of(unprocessedInvoices);
+  }
+
+  public static Boolean process(Invoice invoice) {
+    if (!invoice.getIsSales()) {
+      invoice.getLines().stream()
+          .forEach((line) -> line.getProduct().setQty(line.getProduct().getQty() + line.getQty()));
+      Db().save(invoice);
+      return true;
+    } else {
+      var hasInvalidLine =
+          invoice.getLines().stream().anyMatch(il -> il.getProduct().getQty() < il.getQty());
+      if (hasInvalidLine) {
+        invoice.setIsProcessed(false);
+        Db().save(invoice);
+        return false;
+      } else {
+        invoice
+            .getLines()
+            .forEach(
+                (line) -> line.getProduct().setQty(line.getProduct().getQty() - line.getQty()));
+        Db().save(invoice);
+        return true;
+      }
     }
   }
 }

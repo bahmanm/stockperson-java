@@ -23,12 +23,12 @@ import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
 import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.model.Product.Builder.aProduct;
-import static stockperson.service.InvoiceService.invoiceFromCsv;
-import static stockperson.service.InvoiceService.invoicesFromCsvFile;
+import static stockperson.service.InvoiceService.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -171,5 +171,153 @@ class InvoiceServiceTest {
     // THEN
     assertThat(Db().getInvoices().stream().map(Invoice::getDocNo))
         .containsExactlyInAnyOrder("QIjWQ7", "VEyrc8", "i5tDrI", "SNYGhz", "hrLZGI");
+  }
+
+  @Test
+  void test_process_single_purchase_invoice() {
+    // GIVEN
+    var p1 = aProduct().code("p1").qty(10d).build();
+    Db().save(p1);
+    var invoice =
+        anInvoice()
+            .purchaseInvoice()
+            .docNo("docNo")
+            .lines(Set.of(anInvoiceLine().lineNo(1).product(p1).qty(15d).build()))
+            .build();
+
+    // WHEN
+    var result = process(invoice);
+
+    // THEN
+    assertThat(result).isTrue();
+    assertThat(p1.getQty()).isEqualTo(25d);
+  }
+
+  @Test
+  void test_process_single_sales_invoice_ok() {
+    // GIVEN
+    var p1 = aProduct().code("p1").qty(10d).build();
+    Db().save(p1);
+    var invoice =
+        anInvoice()
+            .salesInvoice()
+            .docNo("docNo")
+            .lines(Set.of(anInvoiceLine().lineNo(1).product(p1).qty(9d).build()))
+            .build();
+
+    // WHEN
+    var result = process(invoice);
+
+    // THEN
+    assertThat(result).isTrue();
+    assertThat(p1.getQty()).isEqualTo(1d);
+  }
+
+  @Test
+  void test_process_single_sales_invoice_invalid() {
+    // GIVEN
+    var p1 = aProduct().code("p1").qty(10d).build();
+    Db().save(p1);
+    var invoice =
+        anInvoice()
+            .salesInvoice()
+            .docNo("docNo")
+            .lines(Set.of(anInvoiceLine().lineNo(1).product(p1).qty(11d).build()))
+            .build();
+
+    // WHEN
+    var result = process(invoice);
+
+    // THEN
+    assertThat(result).isFalse();
+    assertThat(p1.getQty()).isEqualTo(10d);
+  }
+
+  @Test
+  void test_process_invoices_invalid() {
+    // GIVEN
+    var p1 = aProduct().code("p1").qty(10d).build();
+    Db().save(p1);
+
+    var invoice1 =
+        anInvoice()
+            .date(new Date())
+            .docNo("i1")
+            .salesInvoice()
+            .lines(Set.of(anInvoiceLine().product(p1).qty(11d).build()))
+            .build();
+    var invoice2 =
+        anInvoice()
+            .date(new Date())
+            .docNo("i2")
+            .purchaseInvoice()
+            .lines(Set.of(anInvoiceLine().product(p1).qty(10d).build()))
+            .build();
+
+    // WHEN
+    var result = process(Set.of(invoice1, invoice2));
+
+    // THEN
+    assertThat(result).hasValue(Set.of(invoice1));
+    assertThat(p1.getQty()).isEqualTo(20d);
+  }
+
+  @Test
+  void test_process_invoices_ok() {
+    // GIVEN
+    var p1 = aProduct().code("p1").qty(10d).build();
+    Db().save(p1);
+
+    var invoice1 =
+        anInvoice()
+            .date(new Date())
+            .docNo("i1")
+            .salesInvoice()
+            .lines(Set.of(anInvoiceLine().product(p1).qty(9d).build()))
+            .build();
+    var invoice2 =
+        anInvoice()
+            .date(new Date())
+            .docNo("i2")
+            .purchaseInvoice()
+            .lines(Set.of(anInvoiceLine().product(p1).qty(10d).build()))
+            .build();
+
+    // WHEN
+    var result = process(Set.of(invoice1, invoice2));
+
+    // THEN
+    assertThat(result).isEmpty();
+    assertThat(p1.getQty()).isEqualTo(11d);
+  }
+
+  @Test
+  void test_process_invoices_sales_before_purchase() {
+    // GIVEN
+    var p1 = aProduct().code("p1").qty(10d).build();
+    Db().save(p1);
+
+    var invoice1 =
+        anInvoice()
+            .date(new Date())
+            .docNo("i2")
+            .purchaseInvoice()
+            .lines(Set.of(anInvoiceLine().product(p1).qty(10d).build()))
+            .build();
+
+    var invoice2 =
+        anInvoice()
+            .date(new Date())
+            .docNo("i1")
+            .salesInvoice()
+            .lines(Set.of(anInvoiceLine().product(p1).qty(15d).build()))
+            .build();
+
+    // WHEN
+    var result = process(Set.of(invoice1, invoice2));
+
+    // THEN
+    assertThat(result).isEmpty();
+    assertThat(p1.getQty()).isEqualTo(5d);
   }
 }
