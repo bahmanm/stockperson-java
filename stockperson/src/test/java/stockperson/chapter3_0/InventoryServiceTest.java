@@ -24,10 +24,16 @@ import static stockperson.chapter3_0.InventoryService.qtyOut;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Product.Builder.aProduct;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stockperson.db.Db;
 
 class InventoryServiceTest {
+
+  @BeforeEach
+  void clearState() {
+    Db.clear();
+  }
 
   @Test
   void test_qtyIn() {
