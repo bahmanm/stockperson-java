@@ -26,12 +26,14 @@ import java.util.stream.Collectors;
 
 public class Invoice {
 
+  private Boolean isSales = true;
   private String docNo;
-  private String customer;
+  private String businessPartner;
   private Date date;
   private Double discount;
   private Double total;
   private Set<InvoiceLine> lines = new HashSet<>();
+  private Boolean isProcessed = false;
 
   private Invoice() {}
 
@@ -39,8 +41,8 @@ public class Invoice {
     return docNo;
   }
 
-  public String getCustomer() {
-    return customer;
+  public String getBusinessPartner() {
+    return businessPartner;
   }
 
   public Date getDate() {
@@ -63,12 +65,24 @@ public class Invoice {
     lines.add(line);
   }
 
+  public Boolean getProcessed() {
+    return isProcessed;
+  }
+
+  public void setIsProcessed(Boolean isProcessed) {
+    this.isProcessed = isProcessed;
+  }
+
+  public Boolean getIsSales() {
+    return isSales;
+  }
+
   @Override
   public String toString() {
     return "Invoice(%s, %s, %s, %.2f, %.2f, [%s])"
         .formatted(
             docNo,
-            customer,
+            businessPartner,
             new SimpleDateFormat("yyyy-MM-dd").format(date),
             discount,
             total,
@@ -99,7 +113,7 @@ public class Invoice {
     }
 
     public Builder customer(String customer) {
-      invoice.customer = customer;
+      invoice.businessPartner = customer;
       return this;
     }
 
@@ -120,6 +134,16 @@ public class Invoice {
 
     public Builder lines(Set<InvoiceLine> lines) {
       invoice.lines = lines;
+      return this;
+    }
+
+    public Builder salesInvoice() {
+      invoice.isSales = true;
+      return this;
+    }
+
+    public Builder purchaseInvoice() {
+      invoice.isSales = false;
       return this;
     }
 

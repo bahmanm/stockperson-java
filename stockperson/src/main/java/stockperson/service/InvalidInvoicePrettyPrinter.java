@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.function.Consumer;
 import stockperson.model.Invoice;
 
-public class InvoicePrettyPrinter implements Consumer<Invoice> {
+public class InvalidInvoicePrettyPrinter implements Consumer<Invoice> {
 
   @Override
   public void accept(Invoice invoice) {
@@ -50,8 +50,9 @@ public class InvoicePrettyPrinter implements Consumer<Invoice> {
             .toList();
     for (var line : lines) {
       System.out.println(
-          "| %4d  %-27s  %10.2f  %11.2f  %16.2f |"
+          "%1s %4d  %-27s  %10.2f  %11.2f  %16.2f |"
               .formatted(
+                  line.getIsValid() ? "|" : "x",
                   line.getLineNo(),
                   line.getProduct().getCode(),
                   line.getQty(),

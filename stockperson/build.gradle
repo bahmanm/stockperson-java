@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'IGNORE_ME'
+}
+
 dependencies {
     testImplementation libs.junit.jupiter
     testImplementation 'org.assertj:assertj-core:3.27.2'
@@ -22,10 +26,6 @@ java {
     }
 }
 
-application {
-    mainClass = 'stockperson.Main'
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
@@ -36,7 +36,7 @@ spotless {
     format 'misc', {
         target '*.gradle', '.gitignore'
         trimTrailingWhitespace()
-        indentWithSpaces()
+        leadingTabsToSpaces()
         endWithNewline()
     }
     java {

@@ -16,24 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0;
+package stockperson.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static stockperson.db.Db.Db;
 
 import java.io.File;
-import stockperson.service.CsvService;
-import stockperson.service.InvoicePrettyPrinter;
+import java.io.IOException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import stockperson.db.Db;
+import stockperson.model.Invoice;
 import stockperson.service.csvloaders.InvoiceLoader;
 
-public class Main {
+class CsvServiceTest {
 
-  public static void main(String[] args) {
-    CsvService.load(new File(args[0]), new InvoiceLoader(true));
-    Db().getInvoices().stream()
-        .sorted(
-            (i1, i2) -> {
-              return i1.getDate().before(i2.getDate()) ? 1 : -1;
-            })
-        .forEach(new InvoicePrettyPrinter());
+  @BeforeEach
+  void clearState() {
+    Db.clear();
+  }
+
+  @Test
+  void test_invoicesFromCsv() throws IOException {
+    // GIVEN
+    var path = getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getFile();
+
+    // WHEN
+    CsvService.load(new File(path), new InvoiceLoader(true));
+
+    // THEN
+    assertThat(Db().getInvoices().stream().map(Invoice::getDocNo))
+        .containsExactlyInAnyOrder("QIjWQ7", "VEyrc8", "i5tDrI", "SNYGhz", "hrLZGI");
   }
 }

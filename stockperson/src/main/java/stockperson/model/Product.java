@@ -21,11 +21,20 @@ package stockperson.model;
 public class Product {
 
   private String code;
+  private Double qty;
 
   private Product() {}
 
   public String getCode() {
     return code;
+  }
+
+  public Double getQty() {
+    return qty;
+  }
+
+  public void setQty(Double qty) {
+    this.qty = qty;
   }
 
   @Override
@@ -42,18 +51,23 @@ public class Product {
     }
   }
 
-  public static class ProductBuilder {
+  public static class Builder {
 
     private Product product = new Product();
 
-    private ProductBuilder() {}
+    private Builder() {}
 
-    public static ProductBuilder aProduct() {
-      return new ProductBuilder();
+    public static Builder aProduct() {
+      return new Builder();
     }
 
-    public ProductBuilder code(String code) {
+    public Builder code(String code) {
       product.code = code;
+      return this;
+    }
+
+    public Builder qty(Double qty) {
+      product.qty = qty;
       return this;
     }
 

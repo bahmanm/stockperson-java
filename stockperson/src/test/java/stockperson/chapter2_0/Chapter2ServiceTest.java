@@ -23,7 +23,7 @@ import static stockperson.chapter2_0.Chapter2Service.*;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
 import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
-import static stockperson.model.Product.ProductBuilder.aProduct;
+import static stockperson.model.Product.Builder.aProduct;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

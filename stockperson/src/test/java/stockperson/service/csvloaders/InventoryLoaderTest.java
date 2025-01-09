@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.db;
+package stockperson.service.csvloaders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stockperson.db.Db.Db;
-import static stockperson.model.Invoice.Builder.anInvoice;
 import static stockperson.model.Product.Builder.aProduct;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import stockperson.db.Db;
 
-class DbTest {
+class InventoryLoaderTest {
 
   @BeforeEach
   void clearState() {
@@ -34,58 +34,28 @@ class DbTest {
   }
 
   @Test
-  void saveProduct() {
+  void accept_new_product() {
     // GIVEN
-    var p1 = aProduct().code("p1").build();
-    var p2 = aProduct().code("p2").build();
+    var csv = "p1,100.00";
 
     // WHEN
-    Db().save(p1);
-    Db().save(p1);
-    Db().save(p2);
+    new InventoryLoader().accept(csv);
 
-    // EXPECT
-    assertThat(Db().getProducts()).containsExactlyInAnyOrder(p1, p2);
+    // THEN
+    assertThat(Db().getProduct("p1")).isPresent();
+    assertThat(Db().getProduct("p1").get().getQty()).isEqualTo(100d);
   }
 
   @Test
-  void saveInvoice() {
+  void accept_existing_product() {
     // GIVEN
-    var i1 = anInvoice().docNo("docNo1").build();
-    var i2 = anInvoice().docNo("docNo2").build();
+    var csv = "p1,100.00";
+    Db().save(aProduct().code("p1").qty(1d).build());
 
     // WHEN
-    Db().save(i1);
-    Db().save(i1);
-    Db().save(i2);
+    new InventoryLoader().accept(csv);
 
-    // EXPECT
-    assertThat(Db().getInvoices()).containsExactlyInAnyOrder(i1, i2);
-  }
-
-  @Test
-  void getInvoice() {
-    // GIVEN
-    var i1 = anInvoice().docNo("docNo1").build();
-
-    // WHEN
-    Db().save(i1);
-
-    // EXPECT
-    assertThat(Db().getInvoice("docNo1")).hasValue(i1);
-    assertThat(Db().getInvoice("docNo2")).isEmpty();
-  }
-
-  @Test
-  void getProduct() {
-    // GIVEN
-    var p1 = aProduct().code("p1").build();
-
-    // WHEN
-    Db().save(p1);
-
-    // EXPECT
-    assertThat(Db().getProduct("p1")).hasValue(p1);
-    assertThat(Db().getProduct("p2")).isEmpty();
+    // THEN
+    assertThat(Db().getProduct("p1").get().getQty()).isEqualTo(100d);
   }
 }

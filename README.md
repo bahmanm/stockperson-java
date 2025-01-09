@@ -36,5 +36,18 @@ $ make chapter-1.0
 $ make chapter-2.0
 ```
 
+# ✅ Chapter 3.0
+* ✔️ Read a CSV file that contains product inventory. 
+* ✔️ Read a CSV file that contains sales invoice lines.
+* ✔️ Check if the product referenced on each line has enough inventory.
+* ✔️ If no, do not import the invoice to which the line belongs.
+* ✔️ If yes, import the invoice line and update the inventory of the product accordingly.
+* ✔️ Print a list of invoices listing the problematic line(s) for each invoice.
+
+```
+$ make chapter-3.0
+```
+
+
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbahmanm%2Fstockperson-java?ref=badge_large)

@@ -19,17 +19,18 @@
 package stockperson.chapter2_0;
 
 import static stockperson.chapter2_0.Chapter2Service.*;
-import static stockperson.service.InvoiceService.invoicesFromCsvFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import stockperson.service.CsvService;
 import stockperson.service.InvoicePrettyPrinter;
+import stockperson.service.csvloaders.InvoiceLoader;
 
 public class Main {
 
   public static void main(String[] args) {
     // 1
-    invoicesFromCsvFile(new File(args[0]));
+    CsvService.load(new File(args[0]), new InvoiceLoader(true));
     // 2
     System.out.printf("\uD83D\uDC49 TOTAL SALES: %.2f%n", getTotalSales());
     // 3

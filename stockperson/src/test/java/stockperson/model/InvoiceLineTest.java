@@ -20,7 +20,7 @@ package stockperson.model;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
-import static stockperson.model.Product.ProductBuilder.aProduct;
+import static stockperson.model.Product.Builder.aProduct;
 
 import org.junit.jupiter.api.Test;
 

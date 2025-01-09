@@ -16,24 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0;
+package stockperson.service.csvloaders;
 
 import static stockperson.db.Db.Db;
+import static stockperson.model.Product.Builder.aProduct;
 
-import java.io.File;
-import stockperson.service.CsvService;
-import stockperson.service.InvoicePrettyPrinter;
-import stockperson.service.csvloaders.InvoiceLoader;
+import java.util.function.Consumer;
+import stockperson.db.Db;
 
-public class Main {
+public class InventoryLoader implements Consumer<String> {
 
-  public static void main(String[] args) {
-    CsvService.load(new File(args[0]), new InvoiceLoader(true));
-    Db().getInvoices().stream()
-        .sorted(
-            (i1, i2) -> {
-              return i1.getDate().before(i2.getDate()) ? 1 : -1;
-            })
-        .forEach(new InvoicePrettyPrinter());
+  private static enum CsvFields {
+    CODE,
+    QTY
+  }
+
+  @Override
+  public void accept(String csv) {
+    var fields = csv.split(",");
+    var p =
+        aProduct()
+            .code(fields[CsvFields.CODE.ordinal()])
+            .qty(Double.parseDouble(fields[CsvFields.QTY.ordinal()]))
+            .build();
+    Db()
+        .getProduct(p.getCode())
+        .ifPresentOrElse(
+            (existingProduct) -> existingProduct.setQty(p.getQty()), () -> Db().save(p));
   }
 }

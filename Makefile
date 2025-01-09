@@ -91,3 +91,14 @@ chapter-1.0 :
 chapter-2.0 : gradle( shadowJar )
 chapter-2.0 :
 	@java -cp stockperson/build/libs/stockperson.jar stockperson.chapter2_0.Main $(root.data)chapter-2.0.csv
+
+####################################################################################################
+
+.PHONY : chapter-3.0
+
+chapter-3.0 : gradle( shadowJar )
+chapter-3.0 :
+	@java -cp stockperson/build/libs/stockperson.jar stockperson.chapter3_0.Main \
+	  $(root.data)chapter-3.0-products.csv \
+	  $(root.data)chapter-3.0-sales-invoices.csv \
+	  $(root.data)chapter-3.0-purchase-invoices.csv
