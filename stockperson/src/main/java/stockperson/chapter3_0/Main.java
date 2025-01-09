@@ -16,24 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter1_0;
-
-import static stockperson.db.Db.Db;
+package stockperson.chapter3_0;
 
 import java.io.File;
-import stockperson.service.CsvService;
-import stockperson.service.InvoicePrettyPrinter;
-import stockperson.service.csvloaders.InvoiceLoader;
 
 public class Main {
 
   public static void main(String[] args) {
-    CsvService.load(new File(args[0]), new InvoiceLoader(true));
-    Db().getInvoices().stream()
-        .sorted(
-            (i1, i2) -> {
-              return i1.getDate().before(i2.getDate()) ? 1 : -1;
-            })
-        .forEach(new InvoicePrettyPrinter());
+    if (args.length != 3) {
+      System.out.println("USAGE: INVENTORY_FILE SALES_INVOICES_FILE PURCHASE_INVOICES_FILE");
+      System.exit(0);
+    }
+    var inventoryFile = new File(args[0]);
+    var salesInvoicesFile = new File(args[1]);
+    var puchaseInvoicesFile = new File(args[2]);
   }
 }

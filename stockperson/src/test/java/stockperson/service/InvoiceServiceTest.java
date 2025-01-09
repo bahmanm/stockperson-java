@@ -25,16 +25,11 @@ import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
 import static stockperson.model.Product.Builder.aProduct;
 import static stockperson.service.InvoiceService.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stockperson.db.Db;
-import stockperson.model.Invoice;
 import stockperson.model.InvoiceLine;
 
 class InvoiceServiceTest {
@@ -42,136 +37,6 @@ class InvoiceServiceTest {
   @BeforeEach
   void clearState() {
     Db.clear();
-  }
-
-  @Test
-  void test_invoiceFromCsv_existingData() throws Exception {
-    // GIVEN
-    var csv =
-        "QIjWQ7,BOyUMON,2023-11-22,403388202.50,9.25,1,aF1KeUz,580,78933.39,45781371.59605947560";
-    Db().save(aProduct().code("aF1KeUz").build());
-    Db()
-        .save(
-            anInvoice()
-                .docNo("QIjWQ7")
-                .customer("BOyUMON")
-                .date(new SimpleDateFormat("yyyy-MM-dd").parse("2023-11-22"))
-                .discount(9.25d)
-                .total(403388202.50d)
-                .build());
-
-    // WHEN
-    invoiceFromCsv(csv, true);
-
-    // THEN
-    assertThat(Db().getInvoice("QIjWQ7")).isPresent();
-    var invoice = Db().getInvoice("QIjWQ7").get();
-    assertThat(invoice.getLines())
-        .containsExactlyInAnyOrder(
-            anInvoiceLine()
-                .lineNo(1)
-                .product(Db().getProduct("aF1KeUz").get())
-                .qty(580d)
-                .price(78933.39d)
-                .amt(45781371.59605947560d)
-                .build());
-  }
-
-  @Test
-  void test_invoiceFromCsv_nonExistingData() throws Exception {
-    // GIVEN
-    var csv =
-        "QIjWQ7,BOyUMON,2023-11-22,403388202.50,9.25,1,aF1KeUz,580,78933.39,45781371.59605947560";
-    Db()
-        .save(
-            anInvoice()
-                .docNo("QIjWQ7")
-                .customer("BOyUMON")
-                .date(new SimpleDateFormat("yyyy-MM-dd").parse("2023-11-22"))
-                .discount(9.25d)
-                .total(403388202.50d)
-                .build());
-
-    // WHEN
-    invoiceFromCsv(csv, true);
-
-    // THEN
-    assertThat(Db().getProduct("aF1KeUz")).hasValue(aProduct().code("aF1KeUz").build());
-    assertThat(Db().getInvoice("QIjWQ7"))
-        .hasValue(
-            anInvoice()
-                .docNo("QIjWQ7")
-                .customer("BOyUMON")
-                .date(new SimpleDateFormat("yyyy-MM-dd").parse("2023-11-22"))
-                .discount(9.25d)
-                .total(403388202.50d)
-                .lines(
-                    Set.of(
-                        anInvoiceLine()
-                            .lineNo(1)
-                            .product(Db().getProduct("aF1KeUz").get())
-                            .qty(580d)
-                            .price(78933.39d)
-                            .amt(45781371.59605947560d)
-                            .build()))
-                .build());
-  }
-
-  @Test
-  void test_invoiceFromCsv_addsLine() throws Exception {
-    // GIVEN
-    var csv =
-        "QIjWQ7,BOyUMON,2023-11-22,403388202.50,9.25,2,KWrllAa,321,4125.14,1324172.502135007716";
-    Db().save(aProduct().code("aF1KeUz").build());
-    Db().save(aProduct().code("KWrllAa").build());
-    Db()
-        .save(
-            anInvoice()
-                .docNo("QIjWQ7")
-                .customer("BOyUMON")
-                .date(new SimpleDateFormat("yyyy-MM-dd").parse("2023-11-22"))
-                .discount(9.25d)
-                .total(403388202.50d)
-                .lines(
-                    new HashSet<>(
-                        Set.of(
-                            anInvoiceLine()
-                                .lineNo(1)
-                                .product(Db().getProduct("aF1KeUz").get())
-                                .qty(580d)
-                                .price(78933.39d)
-                                .amt(45781371.59605947560d)
-                                .build())))
-                .build());
-
-    // WHEN
-    invoiceFromCsv(csv, true);
-
-    // THEN
-    assertThat(Db().getInvoice("QIjWQ7")).isPresent();
-    var invoice = Db().getInvoice("QIjWQ7").get();
-    assertThat(invoice.getLines())
-        .contains(
-            anInvoiceLine()
-                .lineNo(2)
-                .product(Db().getProduct("KWrllAa").get())
-                .qty(321d)
-                .price(4125.14d)
-                .amt(1324172.502135007716d)
-                .build());
-  }
-
-  @Test
-  void test_invoicesFromCsv() throws IOException {
-    // GIVEN
-    var path = getClass().getResource("/stockperson-data-chapter1.0--set-01.csv").getFile();
-
-    // WHEN
-    invoicesFromCsvFile(new File(path), true);
-
-    // THEN
-    assertThat(Db().getInvoices().stream().map(Invoice::getDocNo))
-        .containsExactlyInAnyOrder("QIjWQ7", "VEyrc8", "i5tDrI", "SNYGhz", "hrLZGI");
   }
 
   @Test
