@@ -18,7 +18,14 @@
  */
 package stockperson.chapter3_0;
 
+import static stockperson.db.Db.Db;
+import static stockperson.service.CsvService.load;
+import static stockperson.service.InvoiceService.process;
+
 import java.io.File;
+import stockperson.service.InvalidInvoicePrettyPrinter;
+import stockperson.service.csvloaders.InventoryLoader;
+import stockperson.service.csvloaders.InvoiceLoader;
 
 public class Main {
 
@@ -27,8 +34,17 @@ public class Main {
       System.out.println("USAGE: INVENTORY_FILE SALES_INVOICES_FILE PURCHASE_INVOICES_FILE");
       System.exit(0);
     }
-    var inventoryFile = new File(args[0]);
-    var salesInvoicesFile = new File(args[1]);
-    var puchaseInvoicesFile = new File(args[2]);
+
+    load(new File(args[0]), new InventoryLoader());
+    load(new File(args[1]), new InvoiceLoader(true));
+    load(new File(args[2]), new InvoiceLoader(false));
+
+    var invalidInvoices = process(Db().getInvoices());
+    invalidInvoices.ifPresent(
+        invoices -> {
+          invoices.stream()
+              .sorted((i1, i2) -> i1.getDate().before(i2.getDate()) ? -1 : 1)
+              .forEach(new InvalidInvoicePrettyPrinter());
+        });
   }
 }
