@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'IGNORE_ME'
+}
+
 dependencies {
     testImplementation libs.junit.jupiter
     testImplementation 'org.assertj:assertj-core:3.27.2'
