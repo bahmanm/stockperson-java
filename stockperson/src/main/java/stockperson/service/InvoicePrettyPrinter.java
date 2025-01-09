@@ -34,7 +34,7 @@ public class InvoicePrettyPrinter implements Consumer<Invoice> {
                 invoice.getDocNo(), new SimpleDateFormat("yyyy-MM-dd").format(invoice.getDate())));
     System.out.println(
         "| CUSTOMER: %-35s DISCOUNT%%: %-19.2f | "
-            .formatted(invoice.getCustomer(), invoice.getDiscount()));
+            .formatted(invoice.getBusinessPartner(), invoice.getDiscount()));
     System.out.println(
         "+------------------------------------------------------------------------------+");
     System.out.println(

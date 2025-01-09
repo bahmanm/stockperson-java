@@ -21,7 +21,7 @@ package stockperson.db;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
-import static stockperson.model.Product.ProductBuilder.aProduct;
+import static stockperson.model.Product.Builder.aProduct;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -21,7 +21,7 @@ package stockperson.model;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static stockperson.model.Invoice.Builder.anInvoice;
 import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
-import static stockperson.model.Product.ProductBuilder.aProduct;
+import static stockperson.model.Product.Builder.aProduct;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,7 +48,7 @@ class InvoiceTest {
 
     // EXPECT
     assertThat(invoice.getDocNo()).isEqualTo("docNo");
-    assertThat(invoice.getCustomer()).isEqualTo("customer");
+    assertThat(invoice.getBusinessPartner()).isEqualTo("customer");
     assertThat(invoice.getDate()).isEqualTo(date);
     assertThat(invoice.getDiscount()).isEqualTo(10d);
     assertThat(invoice.getTotal()).isEqualTo(100d);

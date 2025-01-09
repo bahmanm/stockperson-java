@@ -21,7 +21,7 @@ package stockperson.service;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Invoice.Builder.anInvoice;
 import static stockperson.model.InvoiceLine.Builder.anInvoiceLine;
-import static stockperson.model.Product.ProductBuilder.aProduct;
+import static stockperson.model.Product.Builder.aProduct;
 
 import java.io.*;
 import java.text.ParseException;

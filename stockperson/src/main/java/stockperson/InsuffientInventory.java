@@ -16,39 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.model;
+package stockperson;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static stockperson.model.Product.Builder.aProduct;
-
-import org.junit.jupiter.api.Test;
-
-class ProductTest {
-
-  @Test
-  void test_Builder() {
-    // GIVEN
-    var product = aProduct().code("foo").build();
-
-    // EXPECT
-    assertThat(product.getCode()).isEqualTo("foo");
-  }
-
-  @Test
-  void test_equals() {
-    var p1 = aProduct().code("foo").build();
-    var p2 = aProduct().code("bar").build();
-
-    // EXPECT
-    assertThat(p1.equals(p2)).isFalse();
-  }
-
-  @Test
-  void test_toString() {
-    // GIVEN
-    var p1 = aProduct().code("foo").build();
-
-    // EXPECT
-    assertThat(p1.toString()).isEqualTo("Product(foo)");
+public class InsuffientInventory extends RuntimeException {
+  public InsuffientInventory(String message) {
+    super(message);
   }
 }
