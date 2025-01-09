@@ -16,12 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with StockPerson-Java. If not, see <https://www.gnu.org/licenses/>.
  */
-package stockperson.chapter3_0;
+package stockperson.service;
 
 import static stockperson.db.Db.Db;
 
 import stockperson.InsuffientInventory;
-import stockperson.db.Db;
 import stockperson.model.Product;
 
 public class InventoryService {

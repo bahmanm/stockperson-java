@@ -19,8 +19,8 @@
 package stockperson.chapter3_0;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stockperson.chapter3_0.InventoryService.qtyIn;
-import static stockperson.chapter3_0.InventoryService.qtyOut;
+import static stockperson.service.InventoryService.qtyIn;
+import static stockperson.service.InventoryService.qtyOut;
 import static stockperson.db.Db.Db;
 import static stockperson.model.Product.Builder.aProduct;
 
